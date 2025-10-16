@@ -35,10 +35,10 @@ Agent names are used throughout the SDK in handoffs, tracing, and debugging. To 
 -   **No leading or trailing whitespace** (e.g., `" Agent"` or `"Agent "` will be rejected)
 -   **Must start with a letter**, not a number (e.g., `"1Agent"` will be rejected)
 -   **Limited to 100 characters** to keep names concise and manageable
--   **Allowed characters**: letters, numbers, spaces, hyphens (`-`), and underscores (`_`)
--   **Disallowed characters**: special characters like `@`, `#`, `$`, `%`, `&`, `*`, `/`, etc.
+-   **Allowed characters**: letters (including Unicode/international characters), numbers, spaces, hyphens (`-`), and underscores (`_`)
+-   **Disallowed characters**: special punctuation and symbols like `@`, `#`, `$`, `%`, `&`, `*`, `/`, etc.
 
-These validations help prevent issues with handoff tool naming and ensure consistent behavior across different parts of the system.
+These validations help prevent issues with handoff tool naming and ensure consistent behavior across different parts of the system. International characters (accented letters, non-Latin scripts, etc.) are fully supported.
 
 #### Valid agent names
 
@@ -47,6 +47,9 @@ Agent(name="Customer Service Agent")  # ✓ Spaces are fine
 Agent(name="data_analyst")  # ✓ Underscores work
 Agent(name="Research-Bot")  # ✓ Hyphens are allowed
 Agent(name="Agent123")  # ✓ Numbers are fine (but not at the start)
+Agent(name="Élodie")  # ✓ Unicode/accented characters work
+Agent(name="助手")  # ✓ Non-Latin scripts are supported
+Agent(name="Café Bot")  # ✓ International names work
 ```
 
 #### Invalid agent names

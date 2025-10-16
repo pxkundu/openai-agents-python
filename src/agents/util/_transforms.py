@@ -46,12 +46,18 @@ def validate_agent_name(name: str) -> None:
             f"Consider using {name.strip()!r} instead."
         )
 
-    # Warn about characters that might cause issues in handoffs
-    problematic_chars = re.findall(r"[^a-zA-Z0-9\s_-]", name)
+    # Check for problematic special characters (but allow Unicode letters)
+    # We allow: letters (including Unicode), numbers, spaces, hyphens, underscores
+    problematic_chars = []
+    for char in name:
+        # Allow letters (any Unicode letter), digits, spaces, hyphens, underscores
+        if not (char.isalnum() or char in (" ", "-", "_")):
+            problematic_chars.append(char)
+
     if problematic_chars:
         unique_chars = sorted(set(problematic_chars))
         raise ValueError(
-            f"Agent name {name!r} contains characters {unique_chars} that may cause issues "
+            f"Agent name {name!r} contains special characters {unique_chars} that may cause issues "
             f"in handoffs or function calls. Consider using only letters, numbers, spaces, "
             f"hyphens, and underscores."
         )

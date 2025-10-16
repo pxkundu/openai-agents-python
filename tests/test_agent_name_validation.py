@@ -30,6 +30,29 @@ class TestAgentNameValidation:
             # Should be able to create agent successfully
             Agent(name=name)
 
+    def test_unicode_names_pass(self):
+        """Test that Unicode/international agent names are accepted."""
+        unicode_names = [
+            "Élodie",  # French with accent
+            "助手",  # Japanese (assistant)
+            "Asistente",  # Spanish
+            "Müller Agent",  # German with umlaut
+            "Café Bot",  # French word with accent
+            "São Paulo Agent",  # Portuguese with tilde
+            "Москва",  # Russian (Moscow)
+            "北京助手",  # Chinese
+            "Αγγελος",  # Greek (Angel)
+            "مساعد",  # Arabic (assistant)
+            "Agent Ñoño",  # Spanish with ñ
+            "Søren Bot",  # Danish/Norwegian
+        ]
+
+        for name in unicode_names:
+            # Should not raise any exception
+            validate_agent_name(name)
+            # Should be able to create agent successfully
+            Agent(name=name)
+
     def test_empty_name_fails(self):
         """Test that empty names are rejected."""
         with pytest.raises(ValueError, match="Agent name cannot be empty"):
@@ -103,11 +126,14 @@ class TestAgentNameValidation:
         ]
 
         for name in problematic_names:
-            with pytest.raises(ValueError, match="contains characters .* that may cause issues"):
+            with pytest.raises(
+                ValueError, match="contains special characters .* that may cause issues"
+            ):
                 validate_agent_name(name)
 
             with pytest.raises(
-                ValueError, match="Invalid agent name.*contains characters .* that may cause issues"
+                ValueError,
+                match="Invalid agent name.*contains special characters .* that may cause issues",
             ):
                 Agent(name=name)
 
